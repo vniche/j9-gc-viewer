@@ -55,6 +55,11 @@
       $.getJSON(window.location.origin+window.location.pathname+"/native_stderr.json", function(json) {
         var allocationFailures = json.verbosegc.af;
 
+        if (isChartLoaded) {
+          google.visualization.errors.removeAll(document.getElementById('dashboard_div'));
+          data = [];
+        }
+
         for (var af in allocationFailures) {
           var current = allocationFailures[af];
           if (isUndefined(current)) {
@@ -87,7 +92,7 @@
         })
 
         if (isChartLoaded)
-          dashboard.draw(data);
+          dashboard.draw(google.visualization.arrayToDataTable(headers.concat(data)));
       });
 
       google.charts.setOnLoadCallback(function() {
